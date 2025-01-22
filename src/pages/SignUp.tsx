@@ -7,10 +7,12 @@ export const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [ loading , setLoading] = useState(false)
   const navigate = useNavigate();
 
   async function handleSubmit() {
     try {
+        setLoading(true)
       const response = await axios.post(
         "http://localhost:8787/api/v1/user/signup",
         {
@@ -21,11 +23,20 @@ export const SignUp = () => {
       );
       console.log(response);
       sessionStorage.setItem("token", response.data);
+      setLoading(false)
       navigate("/blogs");
     } catch (e) {
       console.log(e);
+      setLoading(false)
       alert("sigup failed");
     }
+  }
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+      </div>
+    );
   }
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2">
